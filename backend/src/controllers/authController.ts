@@ -32,8 +32,7 @@ async function login(req: Request, res: Response) {
       res.status(200).json({
         success: true,
         result: {
-          accessToken: accessToken,
-          data: user
+          accessToken: accessToken
         }
       });
     }
