@@ -6,7 +6,8 @@ const accountUser = new Schema({
   username: {type: String,require: true},
   password: {type: String,require: true}
 }, {
-  collection: 'account'
+  collection: 'account',
+  versionKey: false
 });
 
 accountUser.set('toJSON', {

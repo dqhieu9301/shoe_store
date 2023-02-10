@@ -17,6 +17,7 @@ async function login(req: Request, res: Response) {
       success: false,
       message: "Missing data field"
     });
+    return;
   }
   accountModel.findOne({ username: username, password: password}, (err: Error, user: IInforUser) => {
     if(err) throw err;
@@ -32,10 +33,42 @@ async function login(req: Request, res: Response) {
         success: true,
         result: {
           accessToken: accessToken,
+          data: user
         }
       });
     }
   });
 }
 
-export { login };
+async function signup(req: Request, res: Response) {
+  const { username, password} = req.body;
+  if(!username || !password) {
+    res.status(401).json({
+      success: false,
+      message: "Missing data field"
+    });
+    return;
+  }
+  accountModel.findOne({ username: username }, (err: Error, user: IInforUser) => {
+    if(err) throw err;
+    if(user) {
+      res.status(401).json({
+        success: false,
+        message: "Username already exists"
+      });
+    } else {
+      const newUser = new accountModel({
+        username: username,
+        password: password
+      });
+      newUser.save(() => {
+        res.status(200).json({
+          success: true,
+          message: "Successful created new user"
+        });
+      }); 
+    }
+  });
+}
+
+export { login, signup };
