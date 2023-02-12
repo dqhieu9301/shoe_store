@@ -8,7 +8,9 @@ export const useStyles = makeStyles(() => ({
     alignItems: 'center',
     position: 'fixed',
     top: '0',
-    width: '100%'
+    width: '100%',
+    zIndex: '99',
+    backgroundColor: 'var(--color-white)'
   },
   container: {
     height: '60px',
@@ -38,5 +40,29 @@ export const useStyles = makeStyles(() => ({
       color: 'var(--color-white)',
       backgroundColor: 'var(--color-yellow)'
     }
+  },
+  leave: {
+    color: 'var(--color-black)',
+    fontWeight: '600',
+    '&:hover': {
+      cursor: 'pointer'
+    }
+  },
+  cartProduct: {
+    position: 'fixed',
+    zIndex: '999',
+    right: '20px',
+    bottom: '20px'
+  },
+  quantityProduct: {
+    fontSize: '11px',
+    position: 'absolute',
+    zIndex: '1000',
+    top: '-3px',
+    right: '-6px',
+    padding: '2px 5px',
+    borderRadius: '50%',
+    backgroundColor: '#fff',
+    fontWeight: '600'
   }
 }));

@@ -5,10 +5,10 @@ import { ILoginForm } from "../interface";
 export const loginThunk = createAsyncThunk(
   '/account/login',
   async ({ username, password}: ILoginForm) => {
-    const res = await axiosInstance.post('/api/account/login', {
+    const res = await axiosInstance.post('/api/auth/login', {
       username: username,
       password: password
     });
-    return res.data.result;
+    return res.data;
   }
 );

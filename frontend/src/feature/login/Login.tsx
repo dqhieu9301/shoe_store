@@ -1,13 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import { TextField, Container, Typography, Link, Fab, Button, Box } from '@mui/material';
 import { useStyles } from './Login.style';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
+import { useAppDispatch } from '../../store/hook';
+import { loginThunk } from './redux/Action';
+import { useNavigate } from 'react-router';
 
 export const Login = () => {
 
   const classes = useStyles();
+  const dispatch = useAppDispatch();
+  const [errorLogin, setErrorLogin] = useState(false);
+  const navigate = useNavigate();
+
   const validateForm = Yup.object({
     username: Yup.string().required().max(100),
     password: Yup.string().required().max(30)
@@ -20,7 +27,12 @@ export const Login = () => {
     },
     validationSchema: validateForm,
     onSubmit: async (values) => {
-      console.log(values);
+      const res = await dispatch(loginThunk(values));
+      if(!res.payload) {
+        setErrorLogin(true);
+      } else {
+        navigate('/home');
+      }
     }
   });
   return (
@@ -32,8 +44,10 @@ export const Login = () => {
         <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>Sign in</Typography>
         <TextField
           sx={{ marginBottom: '20px' }}
+          error={errorLogin}
           label="UserName*"
           name='username'
+          onClick={() => {setErrorLogin(false);}}
           value={formik.values.username}
           onChange={formik.handleChange}
           type="text"
@@ -41,14 +55,17 @@ export const Login = () => {
         />
         <TextField
           sx={{ marginBottom: '10px' }}
+          error={errorLogin}
           name='password'
           label="Password*"
           type="password"
+          onClick={() => {setErrorLogin(false);}}
           value={formik.values.password}
           onChange={formik.handleChange}
           fullWidth/>
+        { errorLogin && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>Incorrect account or password</Typography>}
         {
-          formik.values.username.trim() !== '' && formik.values.password.trim() !== ''
+          formik.values.username.trim()  && formik.values.password.trim()
             ? <Button className={classes.buttonSubmit} type='submit'variant="contained">SIGN IN</Button>
             : <Button className={classes.buttonSubmit} variant="contained" disabled>SIGN IN</Button>
         }
