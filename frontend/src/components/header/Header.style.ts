@@ -21,7 +21,10 @@ export const useStyles = makeStyles(() => ({
     justifyContent: 'space-between'
   },
   logo: {
-    height: '100%'
+    height: '100%',
+    '&:hover': {
+      cursor: 'pointer'
+    }
   },
   menu: {
     listStyle: 'none'

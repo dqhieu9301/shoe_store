@@ -1,5 +1,6 @@
 export interface IPayloadCreateToken {
   id: string
+  username: string
 }
 
 export interface IInforUser {

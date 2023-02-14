@@ -4,7 +4,7 @@ import { TextField, Container, Typography, Link, Fab, Button, Box } from '@mui/m
 import { useStyles } from './Login.style';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useAppDispatch } from '../../store/hook';
+import { useAppDispatch } from '../../../store/hook';
 import { loginThunk } from './redux/Action';
 import { useNavigate } from 'react-router';
 
@@ -41,11 +41,11 @@ export const Login = () => {
         <Fab sx={{ marginBottom: '5px' }} size="medium" color="secondary">
           <LockIcon />
         </Fab>
-        <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>Sign in</Typography>
+        <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>Đăng nhập</Typography>
         <TextField
           sx={{ marginBottom: '20px' }}
           error={errorLogin}
-          label="UserName*"
+          label="Tài khoản*"
           name='username'
           onClick={() => {setErrorLogin(false);}}
           value={formik.values.username}
@@ -57,13 +57,13 @@ export const Login = () => {
           sx={{ marginBottom: '10px' }}
           error={errorLogin}
           name='password'
-          label="Password*"
+          label="Mật khẩu*"
           type="password"
           onClick={() => {setErrorLogin(false);}}
           value={formik.values.password}
           onChange={formik.handleChange}
           fullWidth/>
-        { errorLogin && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>Incorrect account or password</Typography>}
+        { errorLogin && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>Sai tài khoản hoặc mật khẩu</Typography>}
         {
           formik.values.username.trim()  && formik.values.password.trim()
             ? <Button className={classes.buttonSubmit} type='submit'variant="contained">SIGN IN</Button>

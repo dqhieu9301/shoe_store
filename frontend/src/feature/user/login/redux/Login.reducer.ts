@@ -1,4 +1,4 @@
-import { getAccessToken, setAccessToken } from './../../../utils/localStorage';
+import { getAccessToken, setAccessToken } from './../../../../utils/localStorage';
 import { createSlice } from "@reduxjs/toolkit";
 import { loginThunk } from './Action';
 

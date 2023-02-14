@@ -1,5 +1,6 @@
+
+import { axiosInstance } from './../../../../api/axios';
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { axiosInstance } from "../../../api/axios";
 import { ILoginForm } from "../interface";
 
 export const loginThunk = createAsyncThunk(
