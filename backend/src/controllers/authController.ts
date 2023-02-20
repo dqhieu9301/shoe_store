@@ -1,8 +1,7 @@
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 import { IInforUser, IPayloadCreateToken } from "../interface/interface";
-import { accountAdminModel } from "../model/admin_account";
-import { accountModel } from "../model/user_account";
+import { accountModel } from "../model/user_account_model";
 
 const { sign } = jwt;
 
@@ -72,34 +71,21 @@ async function signup(req: Request, res: Response) {
   });
 }
 
-async function loginAdmin(req: Request, res: Response) {
-  const { username, password } = req.body;
-  if(!username || !password) {
-    res.status(401).json({
-      success: false,
-      message: "Missing data field"
-    });
-    return;
-  }
-  accountAdminModel.findOne({ username: username, password: password}, (err: Error, user: IInforUser) => {
-    if(err) throw err;
-    if(!user) {
-      res.status(401).json({
+function statisticalUser(req: Request, res: Response) {
+  accountModel.find({}, (err: Error, users: IInforUser[]) => {
+    if(err) {
+      return res.status(400).json({
         success: false,
-        message: "Incorrect account or password"
-      });
-      return;
-    }
-    else {
-      const accessToken = generateAccessToken({id: user.id, username: user.username});
-      res.status(200).json({
-        success: true,
-        result: {
-          accessToken: accessToken
-        }
+        message: "error server"
       });
     }
+    return res.status(200).json({
+      success: true,
+      result: {
+        quantity: users.length
+      }
+    });
   });
 }
 
-export { login, signup, loginAdmin };
+export { login, signup, statisticalUser };

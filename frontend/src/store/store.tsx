@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import LoginReducer from '../feature/user/login/redux/Login.reducer';
+import LoginReducer from '../feature/login/redux/Login.reducer';
+import ProductReducer from '../feature/product/redux/Product.reducer';
 export const store = configureStore({
   reducer: {
-    LoginReducer
+    LoginReducer,
+    ProductReducer
   }
 });
 

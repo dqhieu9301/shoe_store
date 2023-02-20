@@ -13,4 +13,8 @@
   --color-error: red;
   --color-gray: #f0f0f0;
   --color-orange: rgb(255, 195, 0);
+  --color-blackLight: #5b5b5b;
+  --color-border: #efebeb;
+  --color-boderDark: #bcbcbc;
+  --color-redLight: #cf5050;
 }

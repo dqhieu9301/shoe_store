@@ -1,5 +1,5 @@
 
-import { axiosInstance } from './../../../../api/axios';
+import { axiosInstance } from './../../../api/axios';
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ILoginForm } from "../interface";
 

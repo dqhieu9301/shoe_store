@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router';
 import { useStyles } from './SignUp.style';
-import { axiosInstance } from '../../../api/axios';
+import { axiosInstance } from '../../api/axios';
 import { toast } from 'react-toastify';
 
 export const SignUp = () => {

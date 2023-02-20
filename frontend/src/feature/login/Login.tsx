@@ -4,7 +4,7 @@ import { TextField, Container, Typography, Link, Fab, Button, Box } from '@mui/m
 import { useStyles } from './Login.style';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useAppDispatch } from '../../../store/hook';
+import { useAppDispatch } from '../../store/hook';
 import { loginThunk } from './redux/Action';
 import { useNavigate } from 'react-router';
 
