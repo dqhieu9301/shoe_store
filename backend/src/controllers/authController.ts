@@ -1,3 +1,4 @@
+import { validationResult } from 'express-validator';
 import { Request, Response } from "express";
 import jwt from 'jsonwebtoken';
 import { IInforUser, IPayloadCreateToken } from "../interface/interface";
@@ -11,18 +12,18 @@ function generateAccessToken(payload: IPayloadCreateToken) {
 }
 
 async function login(req: Request, res: Response) {
-  const { username, password } = req.body;
-  if(!username || !password) {
-    res.status(401).json({
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({
       success: false,
-      message: "Missing data field"
+      errors: errors.array()
     });
-    return;
   }
+  const { username, password } = req.body;
   accountModel.findOne({ username: username, password: password}, (err: Error, user: IInforUser) => {
     if(err) throw err;
     if(!user) {
-      res.status(401).json({
+      res.status(400).json({
         success: false,
         message: "Incorrect account or password"
       });
@@ -41,14 +42,14 @@ async function login(req: Request, res: Response) {
 }
 
 async function signup(req: Request, res: Response) {
-  const { username, password} = req.body;
-  if(!username || !password) {
-    res.status(401).json({
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({
       success: false,
-      message: "Missing data field"
+      errors: errors.array()
     });
-    return;
   }
+  const { username, password} = req.body;
   accountModel.findOne({ username: username }, (err: Error, user: IInforUser) => {
     if(err) throw err;
     if(user) {
