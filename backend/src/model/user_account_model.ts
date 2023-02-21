@@ -1,13 +1,20 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 const accountUser = new Schema({
-  id: {type: String,require: true},
   username: {type: String,require: true},
   password: {type: String,require: true}
 }, {
   collection: 'account',
-  versionKey: false
+  versionKey: false,
+  id: true,
+  toJSON: {
+    transform(doc, ret){
+      ret.id = ret._id;
+      delete ret._id;
+    }
+  }
 });
 
 accountUser.set('toJSON', {

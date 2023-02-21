@@ -1,8 +1,8 @@
 import express from 'express';
-import { deleteProduct, getAllProduct, saveProduct } from '../controllers/productController';
+import { deleteProduct, getCountProduct, getProductByPage, saveProduct } from '../controllers/productController';
 import { check } from 'express-validator';
 import upload from '../config/uploadFile';
-import { verifyToken } from '../middleware/jwt_auth';
+import { isAuth } from '../middleware/jwt_auth';
 
 const routerProduct = express.Router();
 
@@ -17,10 +17,11 @@ routerProduct.post('/saveProduct', upload.single('pathImage'),
     .custom((value, { req }) => {if (!req.file) throw new Error("Profile Img is required"); return true;}),
   saveProduct);
 
-routerProduct.post('/deleteProduct',verifyToken,
+routerProduct.post('/deleteProduct', isAuth,
   check('id').notEmpty().withMessage("can not empty"),
   deleteProduct);
 
-routerProduct.get('/getAllProduct', getAllProduct);
+routerProduct.get('/getProductByPage/:page', getProductByPage);
+routerProduct.get('/getCountProduct/', isAuth, getCountProduct);
 
 export default routerProduct;

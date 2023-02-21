@@ -4,6 +4,7 @@ import { validationResult } from 'express-validator';
 import dotenv  from 'dotenv';
 import { productModel } from "../model/product_model";
 import { IProduct } from "../interface/interface";
+import { quantityProductOnePage } from "../constant/constant";
 
 dotenv.config();
 
@@ -78,7 +79,8 @@ function deleteProduct(req: Request, res: Response) {
   });
 }
 
-function getAllProduct(req: Request, res: Response) {
+function getProductByPage(req: Request, res: Response) {
+  const page = Number(req.params.page);
   productModel.find({}, (err: Error, products: IProduct[]) => {
     if(err) {
       return res.status(400).json({
@@ -92,6 +94,23 @@ function getAllProduct(req: Request, res: Response) {
         listProduct: products
       }
     });
+  }).skip((page - 1) * quantityProductOnePage).limit(quantityProductOnePage);
+}
+
+function getCountProduct(req: Request, res: Response) {
+  productModel.find({}, (err: Error, products: IProduct[]) => {
+    if(err) {
+      return res.status(400).json({
+        success: false,
+        error: "error"
+      });
+    }
+    return res.status(200).json({
+      success:  true,
+      result: {
+        count: products.length
+      }
+    });
   });
 }
 
@@ -99,4 +118,4 @@ function getAllProduct(req: Request, res: Response) {
 
 
 
-export { saveProduct, deleteProduct, getAllProduct };
+export { saveProduct, deleteProduct, getProductByPage, getCountProduct };

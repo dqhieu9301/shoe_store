@@ -3,7 +3,7 @@ import express, {Request, Response} from 'express';
 import { NextFunction } from "express";
 import jwt from 'jsonwebtoken';
 
-function verifyToken (req: Request, res: Response , next: NextFunction) {
+function isAuth (req: Request, res: Response , next: NextFunction) {
   const authorizationHeader = req.headers['authorization'];
   if(!authorizationHeader) {
     return res.status(401).json({
@@ -14,13 +14,13 @@ function verifyToken (req: Request, res: Response , next: NextFunction) {
   const token = authorizationHeader.split(' ')[1];
   jwt.verify(token, process.env.SECRET as string, (err, decoded) => {
     if (err) {
-      return res.status(401).json({
+      return res.status(403).json({
         success: false,
-        message: "Unauthorized!",
+        message: err.toString(),
       });
     }
     next();
   });
 }
 
-export { verifyToken };
+export { isAuth };

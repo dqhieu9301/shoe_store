@@ -1,6 +1,6 @@
 import express from "express";
 import { check } from "express-validator";
-import {login, signup, statisticalUser}  from '../controllers/authController';
+import {login, refreshToken, signup}  from '../controllers/authController';
 
 const routerAuth = express.Router();
 
@@ -14,6 +14,6 @@ routerAuth.post('/signup',
   check('password').notEmpty().withMessage("cannot empty").isLength({ min: 8 }).withMessage("min 8 characters"),
   signup);
 
-routerAuth.get('/statisticalUser', statisticalUser);
+routerAuth.post('/refreshToken', refreshToken);
 
 export default routerAuth;
