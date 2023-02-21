@@ -10,7 +10,8 @@ export const useStyles = makeStyles(() => ({
     top: '0',
     width: '100%',
     zIndex: '99',
-    backgroundColor: 'var(--color-white)'
+    backgroundColor: 'var(--color-white)',
+    borderBottom: '1px solid var(--color-boderLight)'
   },
   container: {
     height: '60px',

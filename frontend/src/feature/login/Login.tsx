@@ -28,7 +28,7 @@ export const Login = () => {
     validationSchema: validateForm,
     onSubmit: async (values) => {
       const res = await dispatch(loginThunk(values));
-      if(!res.payload) {
+      if(!res.payload.success) {
         setErrorLogin(true);
       } else {
         navigate('/home');
