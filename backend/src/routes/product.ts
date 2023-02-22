@@ -22,6 +22,6 @@ routerProduct.post('/deleteProduct', isAuth,
   deleteProduct);
 
 routerProduct.get('/getProductByPage/:page', getProductByPage);
-routerProduct.get('/getCountProduct/', isAuth, getCountProduct);
+routerProduct.get('/getCountProduct/', getCountProduct);
 
 export default routerProduct;

@@ -77,13 +77,13 @@ async function signup(req: Request, res: Response) {
 function refreshToken(req: Request, res: Response) {
   const { refreshToken } = req.body;
   if(!refreshToken) {
-    return res.status(403).json({ success: false, message: "Refresh Token is required!" });
+    return res.status(400).json({ success: false, message: "Refresh Token is required!" });
   }
   jwt.verify(refreshToken, process.env.SECRET_REFRESH_TOKEN as string, (err: any, decoded: any) => {
     if (err) {
       return res.status(403).json({
         success: false,
-        message: err.toString(),
+        message: "refreshToken " + err.toString(),
       });
     }
     const newAccessToken = generateAccessToken({id: decoded.id, username: decoded.username});
