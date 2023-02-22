@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import LockIcon from '@mui/icons-material/Lock';
 import { TextField, Container, Typography, Link, Fab, Button, Box } from '@mui/material';
+import LoadingButton from '@mui/lab/LoadingButton';
 import { useStyles } from './Login.style';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useAppDispatch } from '../../store/hook';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
 import { loginThunk } from './redux/Action';
 import { useNavigate } from 'react-router';
 
@@ -12,6 +13,7 @@ export const Login = () => {
 
   const classes = useStyles();
   const dispatch = useAppDispatch();
+  const isLoading = useAppSelector(state => state.LoginReducer.isLoadding);
   const [errorLogin, setErrorLogin] = useState(false);
   const navigate = useNavigate();
 
@@ -65,9 +67,14 @@ export const Login = () => {
           fullWidth/>
         { errorLogin && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>Sai tài khoản hoặc mật khẩu</Typography>}
         {
-          formik.values.username.trim()  && formik.values.password.trim()
-            ? <Button className={classes.buttonSubmit} type='submit'variant="contained">SIGN IN</Button>
-            : <Button className={classes.buttonSubmit} variant="contained" disabled>SIGN IN</Button>
+          isLoading ? <LoadingButton className={classes.buttonLoading} loading variant="contained" size="large"></LoadingButton> : 
+            <>
+              {
+                formik.values.username.trim()  && formik.values.password.trim()
+                  ? <Button className={classes.buttonSubmit} type='submit'variant="contained">SIGN IN</Button>
+                  : <Button className={classes.buttonSubmit} variant="contained" disabled>SIGN IN</Button>
+              }
+            </>
         }
         <Box sx={{ marginTop: '14px', display: 'flex', justifyContent: 'space-between' }}>
           <Link sx={{ fontSize: '14px' }} href="#">Forgot password</Link>

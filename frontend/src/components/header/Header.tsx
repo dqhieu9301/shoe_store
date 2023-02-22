@@ -1,15 +1,15 @@
 import { Avatar, Box } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import logo from '../../assets/images/logo.png';
 import { useStyles } from './Header.style';
 import LocalGroceryStoreOutlinedIcon from '@mui/icons-material/LocalGroceryStoreOutlined';
-import jwt_decode from "jwt-decode";
-import { getAccessToken, removeAccessToken } from '../../utils/localStorage';
-import { IPayloadDecodeToken } from '../../interface/interface';
+import { useAppDispatch, useAppSelector } from '../../store/hook';
+import { getInforUserThunk } from '../../feature/login/redux/Action';
+import { removeAccessToken, removeRefreshToken } from '../../utils/localStorage';
+import { removeInforUser } from '../../feature/login/redux/Login.reducer';
 
 export const Header = (): JSX.Element => {
 
-  const [name, setName] = useState<undefined | string>(undefined);
   const listMenu = [
     { name: 'GIỚI THIỆU', path: '/gioithieu' },
     { name: 'NIKE', path: '/nike' },
@@ -18,18 +18,16 @@ export const Header = (): JSX.Element => {
     { name: 'JORNAS',path: '/jornas' },
   ];
   const classes = useStyles();
-
+  const dispatch = useAppDispatch();
+  const inforUser = useAppSelector(state => state.LoginReducer.inforUser);
   useEffect(() => {
-    const accessToken = getAccessToken();
-    if(accessToken) {
-      const decode = jwt_decode(accessToken) as IPayloadDecodeToken;
-      setName(decode.username);
-    }
+    dispatch(getInforUserThunk());
   }, []);
 
-  const handleLeaveAccount = () => {
-    setName(undefined);
+  const handleLogout = async () => {
+    dispatch(removeInforUser());
     removeAccessToken();
+    removeRefreshToken();
   };
   return(
     <>
@@ -47,10 +45,10 @@ export const Header = (): JSX.Element => {
           </ul>
           <Box>
             {
-              name ? 
+              inforUser ? 
                 <>
-                  <span>Xin chào, {name} </span>
-                  <span className={classes.leave} onClick={handleLeaveAccount}>| Thoát</span>
+                  <span>Xin chào, {inforUser.username} </span>
+                  <span className={classes.leave} onClick={() => {handleLogout();}}>| Thoát</span>
                 </>
                 :
                 <>

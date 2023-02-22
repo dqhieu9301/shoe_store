@@ -15,5 +15,9 @@ export const useStyles = makeStyles(() => ({
     width: '100%', 
     marginBottom: '5px', 
     marginTop: '8px'
+  },
+  buttonLoading: {
+    width: '100%', 
+    height: '40px'
   }
 }));

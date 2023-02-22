@@ -18,3 +18,15 @@ export const loginThunk = createAsyncThunk(
     }
   }
 );
+
+export const getInforUserThunk = createAsyncThunk(
+  'account/getInforUser',
+  async (_, { rejectWithValue }: any) => {
+    try {
+      const res = await axiosInstance.get('api/user/inforUser');
+      return res.data;
+    } catch (err: any) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
