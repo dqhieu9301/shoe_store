@@ -8,6 +8,7 @@ export enum EStatusProduct {
     "OLD" = 0
 }
 
+
 export interface IProduct {
   id: string
   name: string

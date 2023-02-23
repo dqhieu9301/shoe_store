@@ -16,9 +16,9 @@ export const SignUp = () => {
   const navigate = useNavigate();
 
   const validateForm = Yup.object({
-    username: Yup.string().required().max(100),
-    password: Yup.string().required().max(30),
-    passwordConfirmation : Yup.string().oneOf([Yup.ref('password')], 'Mật khẩu phải trùng khớp')
+    username: Yup.string().required("This field cannot be left blank").min(8, "Account with at least 8 characters").max(100),
+    password: Yup.string().required("This field cannot be left blank").min(8, "Password with at least 8 characters").max(30),
+    passwordConfirmation : Yup.string().required("This field cannot be left blank").oneOf([Yup.ref('password')], 'Password must match')
   });
 
   const formik = useFormik({
@@ -31,8 +31,9 @@ export const SignUp = () => {
     onSubmit: async (values) => {
       try {
         const res = await axiosInstance.post('api/auth/signup', { username: values.username, password: values.password });
-        if(res.data.success) {
-          toast.success('Tạo tài khoản thành công!', {
+        console.log(res);
+        if(res.data.status === 200) {
+          toast.success(res.data.message, {
             position: "top-center",
             autoClose: 2000,
             hideProgressBar: false,
@@ -47,7 +48,9 @@ export const SignUp = () => {
           }, 3000);
         }
       } catch (err: any) {
-        setErrorMessage(err.response.data.message);
+        if(err.response.status === 400) {
+          setErrorMessage(err.response.data.message);
+        }
       }
     }
   });
@@ -57,46 +60,52 @@ export const SignUp = () => {
         <Fab sx={{ marginBottom: '5px' }} size="medium" color="secondary">
           <LockIcon />
         </Fab>
-        <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>Đăng ký</Typography>
+        <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>SignUp</Typography>
         <TextField
-          sx={{ marginBottom: '20px' }}
-          error={errorMessage ? true : false}
-          label="Nhập tài khoản*"
+          sx={{ marginBottom: '10px' }}
+          error={errorMessage || (formik.errors.username && formik.touched.username) ? true : false}
+          label="Username*"
           name='username'
           onClick={() => { setErrorMessage(false);} }
+          onBlur={formik.handleBlur}
           value={formik.values.username}
           onChange={formik.handleChange}
           type="text"
           fullWidth
         />
-        { errorMessage && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '20px', color: 'var(--color-error)' }}>Tài khoản đã tồn tại</Typography>}
+        { formik.errors.username && formik.touched.username ? <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '20px', color: 'var(--color-error)' }}>{formik.errors.username}</Typography> : ''}
+        { errorMessage && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '20px', color: 'var(--color-error)' }}>{errorMessage}</Typography>}
         <TextField
           sx={{ marginBottom: '10px' }}
+          error={formik.errors.password && formik.touched.password ? true : false}
           name='password'
-          label="Nhập mật khẩu*"
+          label="Password*"
           type="password"
           value={formik.values.password}
           onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
           fullWidth/>
+        { formik.errors.password && formik.touched.password ? <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '20px', color: 'var(--color-error)' }}>{formik.errors.password}</Typography> : ''}
         <TextField
           sx={{ marginBottom: '10px' }}
-          error={formik.errors.passwordConfirmation ? true : false}
+          error={formik.errors.passwordConfirmation && formik.touched.passwordConfirmation ? true : false}
           name='passwordConfirmation'
-          label="Nhập lại mật khẩu*"
+          label="Password Confirmation*"
           type="password"
           value={formik.values.passwordConfirmation}
           onBlur={formik.handleBlur}
           onChange={formik.handleChange}
           fullWidth/>
-        { formik.errors.passwordConfirmation && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>{formik.errors.passwordConfirmation}</Typography>}
+        { formik.errors.passwordConfirmation && formik.touched.passwordConfirmation ? <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '20px', color: 'var(--color-error)' }}>{formik.errors.passwordConfirmation}</Typography> : ''}
+        
         {
           formik.values.username.trim()  && formik.values.password.trim() && formik.values.passwordConfirmation.trim()
-            ? <Button className={classes.buttonSubmit} type='submit'variant="contained">Đăng ký</Button>
-            : <Button className={classes.buttonSubmit} variant="contained" disabled>Đăng ký</Button>
+            ? <Button className={classes.buttonSubmit} type='submit'variant="contained">Sign Up</Button>
+            : <Button className={classes.buttonSubmit} variant="contained" disabled>Sign Up</Button>
         }
         <Box sx={{ marginTop: '14px', display: 'flex', justifyContent: 'space-between' }}>
-          <Link sx={{ fontSize: '14px' }} href="/">Trang trủ</Link>
-          <Link sx={{ fontSize: '14px' }} href='/account/login'>Đã có tài khoản ? Đăng nhập</Link>
+          <Link sx={{ fontSize: '14px' }} href="/">Home</Link>
+          <Link sx={{ fontSize: '14px' }} href='/account/login'>Already have an account? Log in</Link>
         </Box>
         <Typography variant='h4' align='center' sx={{ fontSize: '15px', marginTop: '30px', color: '#000000' }}>Copyright © Your Website 2022.</Typography>
       </form>

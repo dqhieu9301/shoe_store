@@ -23,9 +23,9 @@ export const loginSlice = createSlice({
         state.isLoadding = true;
       })
       .addCase(loginThunk.fulfilled, (state, action) => {
-        state.accessToken = action.payload.result.accessToken as string;
+        state.accessToken = action.payload.data.result.accessToken as string;
         setAccessToken(state.accessToken);
-        setRefreshToken(action.payload.result.refreshToken as string);
+        setRefreshToken(action.payload.data.result.refreshToken as string);
         state.isLoadding = false;
       })
       .addCase(loginThunk.rejected, (state) => {

@@ -12,9 +12,9 @@ export const loginThunk = createAsyncThunk(
         username: username,
         password: password
       });
-      return res.data;
+      return res;
     } catch (err: any) {
-      return rejectWithValue(err.response.data);
+      return rejectWithValue(err.response);
     }
   }
 );

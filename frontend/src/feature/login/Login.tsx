@@ -14,7 +14,7 @@ export const Login = () => {
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(state => state.LoginReducer.isLoadding);
-  const [errorLogin, setErrorLogin] = useState(false);
+  const [errorLogin, setErrorLogin] = useState<null | string>();
   const navigate = useNavigate();
 
   const validateForm = Yup.object({
@@ -30,10 +30,10 @@ export const Login = () => {
     validationSchema: validateForm,
     onSubmit: async (values) => {
       const res = await dispatch(loginThunk(values));
-      if(!res.payload.success) {
-        setErrorLogin(true);
-      } else {
-        navigate('/home');
+      if(res.payload.status === 400) {
+        setErrorLogin(res.payload.data.message);
+      } else if(res.payload.status === 200) {
+        navigate('/');
       }
     }
   });
@@ -43,13 +43,13 @@ export const Login = () => {
         <Fab sx={{ marginBottom: '5px' }} size="medium" color="secondary">
           <LockIcon />
         </Fab>
-        <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>Đăng nhập</Typography>
+        <Typography sx={{ fontSize: '26px', marginBottom: '20px' }} variant='h2'>Login</Typography>
         <TextField
           sx={{ marginBottom: '20px' }}
-          error={errorLogin}
-          label="Tài khoản*"
+          error={errorLogin ? true : false}
+          label="Username*"
           name='username'
-          onClick={() => {setErrorLogin(false);}}
+          onClick={() => {setErrorLogin(null);}}
           value={formik.values.username}
           onChange={formik.handleChange}
           type="text"
@@ -57,15 +57,15 @@ export const Login = () => {
         />
         <TextField
           sx={{ marginBottom: '10px' }}
-          error={errorLogin}
+          error={errorLogin ? true : false}
           name='password'
-          label="Mật khẩu*"
+          label="Password*"
           type="password"
-          onClick={() => {setErrorLogin(false);}}
+          onClick={() => {setErrorLogin(null);}}
           value={formik.values.password}
           onChange={formik.handleChange}
           fullWidth/>
-        { errorLogin && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>Sai tài khoản hoặc mật khẩu</Typography>}
+        { errorLogin && <Typography variant='h4' align='left' sx={{ fontSize: '13px', marginBottom: '10px', color: 'var(--color-error)' }}>{errorLogin}</Typography>}
         {
           isLoading ? <LoadingButton className={classes.buttonLoading} loading variant="contained" size="large"></LoadingButton> : 
             <>
@@ -78,7 +78,7 @@ export const Login = () => {
         }
         <Box sx={{ marginTop: '14px', display: 'flex', justifyContent: 'space-between' }}>
           <Link sx={{ fontSize: '14px' }} href="#">Forgot password</Link>
-          <Link sx={{ fontSize: '14px' }} href='/account/sign-up'>Don`t have an account? Sign Up</Link>
+          <Link sx={{ fontSize: '14px' }} href='/account/signup'>Don`t have an account? Sign Up</Link>
         </Box>
         <Typography variant='h4' align='center' sx={{ fontSize: '15px', marginTop: '30px', color: '#000000' }}>Copyright © Your Website 2022.</Typography>
       </form>

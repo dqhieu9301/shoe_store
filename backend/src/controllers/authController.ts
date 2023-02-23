@@ -60,7 +60,7 @@ async function signup(req: Request, res: Response) {
   accountModel.findOne({ username: username }, (err: Error, user: IInforUser) => {
     if(err) throw err;
     if(user) {
-      res.status(401).json({ success: false, message: "Username already exists" });
+      res.status(400).json({ success: false, message: "Username already exists" });
     } else {
       const newUser = new accountModel({
         username: username,
