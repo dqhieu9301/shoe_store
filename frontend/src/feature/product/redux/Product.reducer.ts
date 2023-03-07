@@ -1,4 +1,6 @@
-import { getListProductByPage, getCountProduct } from './Action';
+import { getProductById } from './Action';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { getListProductByType } from './Action';
 
 import { createSlice } from "@reduxjs/toolkit";
 import { IProduct } from '../../../interface/interface';
@@ -10,6 +12,7 @@ export const productSlice = createSlice({
     isLoadding: false,
     isError: false,
     listProduct: [] as IProduct[],
+    product: null as null | IProduct,
     countProduct: 0 as number
   },
   reducers: {
@@ -17,20 +20,21 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getListProductByPage.pending, (state) => {
+      .addCase(getListProductByType.pending, (state) => {
         state.isLoadding = true;
       })
-      .addCase(getListProductByPage.fulfilled, (state, action) => {
-        state.listProduct = action.payload.result.listProduct;
+      .addCase(getListProductByType.fulfilled, (state, action: any) => {
+        state.listProduct = action.payload.data.result.listProduct;
+        state.countProduct = action.payload.data.result.size;
         state.isLoadding = false;
       })
-      .addCase(getListProductByPage.rejected, (state) => {
+      .addCase(getListProductByType.rejected, (state) => {
         state.isError = true;
         state.isLoadding = false;
       })
-      .addCase(getCountProduct.fulfilled, (state, action) => {
-        state.countProduct = action.payload.result.count;
+      .addCase(getProductById.fulfilled, (state, action: any) => {
         state.isLoadding = false;
+        state.product = action.payload.data.result.product;
       });
 
   }

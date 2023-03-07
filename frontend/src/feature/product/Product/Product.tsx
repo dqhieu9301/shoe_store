@@ -1,5 +1,6 @@
 import { Box, Rating, Typography } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router";
 import { EStatusProduct } from "../../../interface/interface";
 import { useStyles } from "./Product.style";
 
@@ -18,9 +19,14 @@ interface Props {
 
 export const Product: React.FC<Props> = ({ product }) => {
 
+  const navigate = useNavigate();
   const classes = useStyles();
+
+  const handleNavigateDetailProduct = () => {
+    navigate(`/product/detail/${product.id}`);
+  };
   return(
-    <Box className={classes.container}>
+    <Box onClick={handleNavigateDetailProduct} className={classes.container}>
       <img src={product.pathImage} className={classes.image}/>
       <Box className={classes.content}>
         <Typography variant="h5" className={classes.name}>{product.name}</Typography>

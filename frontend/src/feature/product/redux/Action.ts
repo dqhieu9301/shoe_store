@@ -1,19 +1,28 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { axiosInstance } from '../../../api/axios';
 
 
-export const getListProductByPage = createAsyncThunk(
-  'product/getListProduct',
-  async (page: number) => {
-    const res = await axiosInstance.get(`api/product/getProductByPage/${page}`);
-    return res.data;
+export const getListProductByType = createAsyncThunk(
+  'product/getListProductByType',
+  async ({type, page}: any, {rejectWithValue}: any) => {
+    try {
+      const res = await axiosInstance.get(`api/product/getProductByType?type=${type}&page=${page}`);
+      return res;
+    } catch (err: any) {
+      rejectWithValue(err.response);
+    }
   }
 );
 
-export const getCountProduct = createAsyncThunk(
-  'product/getCountProduct',
-  async () => {
-    const res = await axiosInstance.get('api/product/getCountProduct');
-    return res.data;
+export const getProductById = createAsyncThunk(
+  '/product/getProductById',
+  async (productId: string, {rejectWithValue}: any) => {
+    try {
+      const res = await axiosInstance.get(`api/product/getProductById?productId=${productId}`);
+      return res;
+    } catch (err: any) {
+      rejectWithValue(err.response);
+    }
   }
 );

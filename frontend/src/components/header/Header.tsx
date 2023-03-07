@@ -7,19 +7,21 @@ import { useAppDispatch, useAppSelector } from '../../store/hook';
 import { getInforUserThunk } from '../../feature/login/redux/Action';
 import { removeAccessToken, removeRefreshToken } from '../../utils/localStorage';
 import { removeInforUser } from '../../feature/login/redux/Login.reducer';
+import { useNavigate } from 'react-router';
 
 export const Header = (): JSX.Element => {
 
   const listMenu = [
     { name: 'GIỚI THIỆU', path: '/gioithieu' },
-    { name: 'NIKE', path: '/nike' },
-    { name: 'YEEZY',path: '/yeezy' },
-    { name: 'ADIDAS',path: '/adidas' },
-    { name: 'JORNAS',path: '/jornas' },
+    { name: 'NIKE', path: '/product/nike/1' },
+    { name: 'YEEZY',path: '/product/yeezy/1' },
+    { name: 'ADIDAS',path: '/product/adidas/1' },
+    { name: 'JORNAS',path: '/product/jornas/1' },
   ];
   const classes = useStyles();
   const dispatch = useAppDispatch();
   const inforUser = useAppSelector(state => state.LoginReducer.inforUser);
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getInforUserThunk());
   }, []);
@@ -33,7 +35,7 @@ export const Header = (): JSX.Element => {
     <>
       <header className={classes.header}>
         <Box className={classes.container}>
-          <img className={classes.logo} src={logo}/>
+          <img onClick={() => { navigate('/');}} className={classes.logo} src={logo}/>
           <ul className={classes.menu}>
             {
               listMenu.map((item) => {

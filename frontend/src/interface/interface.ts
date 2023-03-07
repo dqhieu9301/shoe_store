@@ -8,6 +8,10 @@ export enum EStatusProduct {
     "OLD" = 0
 }
 
+export enum ETypeProduct {
+  All = 'all',
+  NIKE = "nike"
+}
 
 export interface IProduct {
   id: string
