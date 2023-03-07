@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteProduct, getCountProduct, getProductByPage, saveProduct } from '../controllers/productController';
+import { deleteProduct, getProductById, getProductByType, saveProduct } from '../controllers/productController';
 import { check } from 'express-validator';
 import upload from '../config/uploadFile';
 import { isAuth } from '../middleware/jwt_auth';
@@ -21,7 +21,7 @@ routerProduct.post('/deleteProduct', isAuth,
   check('id').notEmpty().withMessage("can not empty"),
   deleteProduct);
 
-routerProduct.get('/getProductByPage/:page', getProductByPage);
-routerProduct.get('/getCountProduct/', getCountProduct);
+routerProduct.get('/getProductByType/', getProductByType);
+routerProduct.get('/getProductById/', getProductById);
 
 export default routerProduct;

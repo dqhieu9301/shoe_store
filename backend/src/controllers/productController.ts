@@ -43,7 +43,7 @@ function saveProduct(req: Request, res: Response) {
 function deleteProduct(req: Request, res: Response) {
   const errors = validationResult(req);
   if(!errors.isEmpty()) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       errors: errors
     });
@@ -51,7 +51,7 @@ function deleteProduct(req: Request, res: Response) {
   const { id } = req.body;
   productModel.findOne({ _id: id}, (err: Error, product: IProduct) => {
     if(err) {
-      return res.status(400).json({
+      return res.status(500).json({
         success: false,
         error: "error server"
       });
@@ -64,7 +64,7 @@ function deleteProduct(req: Request, res: Response) {
     } else {
       productModel.deleteOne({ _id: id}, (err) => {
         if(err) {
-          return res.status(400).json({
+          return res.status(500).json({
             success: false,
             error: "error server"
           });
@@ -83,7 +83,7 @@ function getProductByPage(req: Request, res: Response) {
   const page = Number(req.params.page);
   productModel.find({}, (err: Error, products: IProduct[]) => {
     if(err) {
-      return res.status(400).json({
+      return res.status(500).json({
         success: false,
         error: "error"
       });
@@ -97,18 +97,42 @@ function getProductByPage(req: Request, res: Response) {
   }).skip((page - 1) * quantityProductOnePage).limit(quantityProductOnePage);
 }
 
-function getCountProduct(req: Request, res: Response) {
-  productModel.find({}, (err: Error, products: IProduct[]) => {
+
+function getProductByType(req: Request, res: Response) {
+  const {type, page} = req.query;
+  productModel.find(type === 'all' ? {} : { shoeBrand : type }, (err: Error, products: IProduct[]) => {
     if(err) {
-      return res.status(400).json({
+      return res.status(500).json({
         success: false,
-        error: "error"
+        error: 'error'
+      });
+    }
+    const newListProduct = products.filter((item, index) => {
+      return index >= (Number(page) - 1) * quantityProductOnePage && index < ((Number(page) - 1) * quantityProductOnePage) + quantityProductOnePage;
+    });
+    return res.status(200).json({
+      success:  true,
+      result: {
+        listProduct: newListProduct,
+        size: products.length
+      }
+    });
+  });
+}
+
+function getProductById(req: Request, res: Response) {
+  const { productId } = req.query;
+  productModel.find({ _id: productId }, (err: Error, product: IProduct) => {
+    if(err) {
+      return res.status(500).json({
+        success: false,
+        error: 'error'
       });
     }
     return res.status(200).json({
       success:  true,
       result: {
-        count: products.length
+        product: product
       }
     });
   });
@@ -118,4 +142,4 @@ function getCountProduct(req: Request, res: Response) {
 
 
 
-export { saveProduct, deleteProduct, getProductByPage, getCountProduct };
+export { saveProduct, deleteProduct, getProductByPage, getProductByType, getProductById };
